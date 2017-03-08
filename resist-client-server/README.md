@@ -1,0 +1,1 @@
+## To run the program, in the current directory, run "npm start" in command line ##
