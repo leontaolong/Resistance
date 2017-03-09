@@ -2,13 +2,13 @@
 //@author Joel Ross
 "use strict";
 let readlineSync = require('readline-sync'); //for easier repeated prompts
-const resistance_1 = require("./resistance");
+const business_1 = require("./business");
 /**
  * Function to run the UI
  */
 function start() {
     //make a manager and start interacting with it
-    showMainMenu(new resistance_1.ResistanceManager());
+    showMainMenu(new business_1.ResistanceManager());
 }
 exports.start = start;
 /**
@@ -261,4 +261,4 @@ function clearData(rm) {
     console.log("All data cleared!");
     readlineSync.keyInPause('(Press any letter to continue)', { guide: false }); //so have time to read stuff
 }
-//# sourceMappingURL=ui.js.map
+//# sourceMappingURL=presentation.js.map

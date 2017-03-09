@@ -1,41 +1,5 @@
 {
-  "protesters": [
-    {
-      "name": "alice",
-      "email": "alice",
-      "location": "98105"
-    },
-    {
-      "name": "leomn",
-      "email": "len",
-      "location": "98105"
-    }
-  ],
-  "protests": [
-    {
-      "name": "blm",
-      "location": "98105",
-      "date": "2011-11-11",
-      "participants": [
-        "alice",
-        "leomn"
-      ]
-    },
-    {
-      "name": "wlm",
-      "location": "98105",
-      "date": "2022-22-22",
-      "participants": [
-        "alice"
-      ]
-    }
-  ],
-  "movements": [
-    {
-      "name": "blm",
-      "protests": [
-        "blm"
-      ]
-    }
-  ]
+  "protesters": [],
+  "protests": [],
+  "movements": []
 }

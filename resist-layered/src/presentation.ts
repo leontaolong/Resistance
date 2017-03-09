@@ -2,7 +2,7 @@
 //@author Joel Ross
 
 let readlineSync = require('readline-sync'); //for easier repeated prompts
-import {ResistanceManager} from './resistance';
+import {ResistanceManager} from './business';
 
 /**
  * Function to run the UI
@@ -27,6 +27,7 @@ function showMainMenu(rm:ResistanceManager) {
   7. List protest members
   8. List members near a protest
   9. List protests near a location
+  C. Clear data in the current database
   10. Exit`);
 
     let response = readlineSync.question('> ')
@@ -44,6 +45,8 @@ function showMainMenu(rm:ResistanceManager) {
       case '7': showListProtestersMenu(rm); break;
       case '8': showListNearbyMembersMenu(rm); break;
       case '9': showListNearbyProtestsMenu(rm); break;
+      case 'C': clearData(rm); break;
+      case 'c': clearData(rm); break;
       //case 10 handled above
       default: console.log('Invalid option!');
     }
@@ -257,6 +260,13 @@ function showListNearbyProtestsMenu(rm:ResistanceManager) {
 
   console.log('Nearby protests:')
   console.log('  '+protests.join('\n  ')+'\n');
+
+  readlineSync.keyInPause('(Press any letter to continue)', {guide:false}); //so have time to read stuff
+}
+
+function clearData(rm:ResistanceManager) {
+  rm.clearData();
+  console.log("All data cleared!");
 
   readlineSync.keyInPause('(Press any letter to continue)', {guide:false}); //so have time to read stuff
 }
