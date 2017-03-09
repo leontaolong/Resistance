@@ -4,43 +4,29 @@ let db = require("../data/database");
 let geolib = require('geolib'); // import geolib module
 let jsonfile = require('jsonfile'); // for json file I/O
 let dbPath = "../data/database.json";
-// a skeleton class that has a name field and getName() method.
-class Subject {
-    constructor(name) {
-        this.name = name;
-    }
-    ;
-    getName() {
-        return this.name;
-    }
-}
-class Protester extends Subject {
+class Protester {
     constructor(name, email, location) {
-        super(name);
+        this.name = name;
         this.email = email;
         this.location = location;
     }
 }
-class Protest extends Subject {
+class Protest {
     constructor(name, location, date) {
-        super(name);
+        this.name = name;
         this.location = location;
         this.date = date;
         this.participants = new Array();
     }
 }
-class Movement extends Subject {
+class Movement {
     constructor(name) {
-        super(name);
+        this.name = name;
         this.protests = new Array();
     }
 }
 class ResistanceManager {
-    constructor() {
-        this.protester_database = new Array();
-        this.protest_database = new Array();
-        this.movement_database = new Array();
-    }
+    constructor() { }
     addMember(name, email, location) {
         if (this.find(db.protesters, name) == undefined) {
             db.protesters.push((new Protester(name, email, location)));
