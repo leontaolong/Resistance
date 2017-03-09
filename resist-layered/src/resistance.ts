@@ -1,5 +1,8 @@
 let locationData = require("../data/zipcode-locations"); // import location dictionary
+let db = require("../data/database");
 let geolib = require('geolib'); // import geolib module
+let jsonfile = require('jsonfile') // for json file I/O
+let dbPath = "../data/database.json";
 
 // a skeleton class that has a name field and getName() method.
 class Subject {
@@ -9,86 +12,25 @@ class Subject {
     }
 }
 
-interface hasLocation {
-    getGeoLocation(): number[];
-}
-
-// a location class that stores and manages information about a certain subject
-class Location {
-    // pass in a zip string to construct a location
-    constructor(private locationZip: string) { }
-
-    // return an array rtepresentatio of the geo location
-    getGeo(): number[] {
-        return locationData[this.locationZip];
-    }
-
-    // take in a database and a distance
-    // return an array of elements from the databae, 
-    // of which locations are in the distance range of this location
-    getNearBy(database, distance: number) {
-        return database.filter((elementSearched) => {
-            let userLoc: number[] = elementSearched.getGeoLocation();
-            let distance_diff = geolib.getDistance(
-                { latitude: userLoc[0], longitude: userLoc[1] },
-                { latitude: this.getGeo()[0], longitude: this.getGeo()[1] }
-            )
-            return distance_diff <= distance;
-        });
-    }
-}
-
-class Protester extends Subject implements hasLocation {
-    private location: Location;
-    constructor(name: string, private email: string, location: string) {
+class Protester extends Subject {
+    constructor(name: string, readonly email: string, readonly location: string) {
         super(name);
-        this.location = new Location(location);
-    }
-    getEmail(): string {
-        return this.email;
-    }
-    getGeoLocation(): number[] {
-        return this.location.getGeo();
     }
 }
 
-class Protest extends Subject implements hasLocation {
-    private participants: string[] = new Array<string>();
-    private location: Location;
-    constructor(name: string, location: string, private date: string) {
+class Protest extends Subject {
+    readonly participants: string[];
+    constructor(name: string, private location: string, private date: string) {
         super(name);
-        this.location = new Location(location);
-    }
-    addParticipant(name: string) {
-        if (!this.participants.includes(name))
-            this.participants.push(name);
-    }
-    getParticipants(): string[] {
-        return this.participants;
-    }
-    getGeoLocation(): number[] {
-        return this.location.getGeo();
-    }
-    getNearBy(database, distance: number): Location {
-        return this.location.getNearBy(database, distance);
-    }
-    resetInfo(newTitle?: string, newTime?: string) {
-        this.name = newTitle;
-        this.date = newTime;
+        this.participants = new Array<string>();
     }
 }
 
 class Movement extends Subject {
-    private protests: string[] = new Array<string>();
+    private protests: string[];
     constructor(name: string) {
         super(name);
-    }
-    addProtest(name: string) {
-        if (!this.protests.includes(name))
-            this.protests.push(name);
-    }
-    getProtests(): string[] {
-        return this.protests;
+        this.protests = new Array<string>();
     }
 }
 
@@ -104,54 +46,70 @@ export class ResistanceManager {
     }
 
     addMember(name: string, email: string, location: string) {
-        if (this.find(this.protester_database, name) == undefined)
-            this.protester_database.push(new Protester(name, email, location));
+        if (this.find(db.protesters, name) == undefined) {
+            db.protesters.push((new Protester(name, email, location)));
+            jsonfile.writeFileSync(dbPath, db, { spaces: 2 });
+        }
         return name;
     }
 
-    addProtest(newProtestName: string, location: string, date: string) {
-        if (this.find(this.protest_database, newProtestName) == undefined)
-            this.protest_database.push(new Protest(newProtestName, location, date));
-        return newProtestName;
+    addProtest(name: string, location: string, date: string) {
+        if (this.find(db.protests, name) == undefined) {
+            db.protests.push(new Protest(name, location, date));
+            jsonfile.writeFileSync(dbPath, db, { spaces: 2 });
+        }
+        return name;
     }
 
-    addMovement(newMovementName: string) {
-        if (this.find(this.movement_database, newMovementName) == undefined)
-            this.movement_database.push(new Movement(newMovementName));
-        return newMovementName;
+    addMovement(name: string) {
+        if (this.find(db.movements, name) == undefined) {
+            db.movements.push(new Movement(name));
+            jsonfile.writeFileSync(dbPath, db, { spaces: 2 });
+        }
+        return name;
     }
 
     addMemberToProtest(memberName: string, protestName: string) {
-        this.find(this.protest_database, protestName).addParticipant(memberName);
+        let participants = this.find(db.protests, protestName).participants;
+        if (!participants.includes(memberName))
+            participants.push(memberName);
+        jsonfile.writeFileSync(dbPath, db, { spaces: 2 });
     }
 
     findMemberNames(quary: string) {
-        return this.search(this.protester_database, quary);
+        return this.search(db.protesters, quary);
     }
 
     findProtestNames(quary: string) {
-        return this.search(this.protest_database, quary);
+        return this.search(db.protests, quary);
     }
 
     findMovementNames(quary: string) {
-        return this.search(this.movement_database, quary);
+        return this.search(db.movements, quary);
     }
 
     modifyProtest(protestName: string, newTitle?: string, newTime?: string) {
-        this.find(this.protest_database, protestName).resetInfo(newTitle, newTime);
+        if (newTitle)
+            this.find(db.protests, protestName).name = newTitle;
+        if (newTime)
+            this.find(db.protests, protestName).date = newTime;
+        jsonfile.writeFileSync(dbPath, db, { spaces: 2 });
     }
 
     addProtestToMovement(protestName: string, movementName: string) {
-        this.find(this.movement_database, movementName).addProtest(protestName);
+        let protests = this.find(db.movements, movementName).protests;
+        if (!protests.includes(protestName))
+            protests.push(protestName);
+        jsonfile.writeFileSync(dbPath, db, { spaces: 2 });
     }
 
     // find an array of emails of the protesters involved in the given protestName
     getProtesters(protestName) {
-        let protest: Protest = this.find(this.protest_database, protestName);
+        let protest: Protest = this.find(db.protests, protestName);
         if (protest) {
-            return protest.getParticipants()
+            return protest.participants
                 .map((participant) => {
-                    return participant + ": " + this.find(this.protester_database, participant).getEmail();
+                    return participant + ": " + this.find(db.protesters, participant).email;
                 });
         }
         return null;
@@ -159,19 +117,19 @@ export class ResistanceManager {
 
     // find an array of emails of the registered users within a distance range of a particular geoLocation
     getUsersNearProtest(protestName: string, distance: number) {
-        let protesters = this.find(this.protest_database, protestName).getNearBy(this.protester_database, distance * 1609.34);
+        let protest = this.find(db.protests, protestName);
+        let protesters = this.getNearBy(this.getGeo(protest.location), db.protesters, distance * 1609.34);
         if (protesters)
-            return protesters.map((protester) => protester.getName() + ": " + protester.getEmail());
+            return protesters.map((protester) => protester.name + ": " + protester.email);
         return null;
     }
 
     // find an array of all protests and its movement(s) within a distance range of a particular location data
     getNearbyProtests(location: string, distance: number) {
-        let thisLoc = new Location(location);
-        let protests = thisLoc.getNearBy(this.protest_database, distance * 1609.34);
+        let protests = this.getNearBy(this.getGeo(location), db.protests, distance * 1609.34);
         if (protests) {
             return protests.map((protest) => {
-                let protestName = protest.getName();
+                let protestName = protest.name;
                 return protestName + `(movements: ${this.findMovement(protestName).join(", ")})`;
             });
         }
@@ -180,11 +138,11 @@ export class ResistanceManager {
 
     // find an array of nation-wide movement(s) that the given protestName is part of
     findMovement(protestName: string) {
-        return this.movement_database.filter((movement) => {
-            let protests = movement.getProtests();
+        return db.movements.filter((movement) => {
+            let protests = movement.protests;
             return protests.includes(protestName);
         })
-            .map((movement) => movement.getName());
+            .map((movement) => movement.name);
     }
 
     // search and return an array of elements from the database,
@@ -192,16 +150,35 @@ export class ResistanceManager {
     search(database, quary) {
         return database
             .filter((elementSearched) => {
-                return elementSearched.getName().toLowerCase()
+                return elementSearched.name.toLowerCase()
                     .includes(quary.toLowerCase())
             })
-            .map((protester) => protester.getName());
+            .map((protester) => protester.name);
     }
 
     // find and return the element from the database, of which name matches the quary
     find(database, quary) {
         return database
-            .find((elementSearched) => elementSearched.getName() == quary);
+            .find((elementSearched) => elementSearched.name == quary);
+    }
+
+    // return an array rtepresentatio of the geo location
+    getGeo(locationZip: string): number[] {
+        return locationData[locationZip];
+    }
+
+    // take in a database and a distance
+    // return an array of elements from the databae, 
+    // of which locations are in the distance range of this location
+    getNearBy(geoLoc, database, distance: number) {
+        return database.filter((elementSearched) => {
+            let userLoc: number[] = this.getGeo(elementSearched.location);
+            let distance_diff = geolib.getDistance(
+                { latitude: userLoc[0], longitude: userLoc[1] },
+                { latitude: geoLoc[0], longitude: geoLoc[1] }
+            )
+            return distance_diff <= distance;
+        });
     }
 }
 
