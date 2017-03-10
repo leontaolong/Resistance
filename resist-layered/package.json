@@ -12,9 +12,9 @@
   "devDependencies": {
     "@types/node": "^7.0.5",
     "geolib": "^2.0.22",
-    "readline-sync": "^1.4.5"
+    "readline-sync": "^1.4.5",
+    "jsonfile": "^2.4.0"
   },
   "dependencies": {
-    "jsonfile": "^2.4.0"
   }
 }

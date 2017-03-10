@@ -5,13 +5,18 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start" : "cd build/ && node index.js"
+    "start": "cd build/ && node index.js"
   },
   "author": "Leon Long, Patrick Yi",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^7.0.5",
     "geolib": "^2.0.22",
-    "readline-sync": "^1.4.5"
+    "readline-sync": "^1.4.5",
+    "flux": "^3.1.2",
+    "react": "^15.4.2",
+    "events": "^1.1.1"
+  },
+  "dependencies": {
   }
 }
