@@ -26,17 +26,17 @@ export class ProtesterStore extends EventEmitter {
     }
 }
 
-export class ProtesStore extends EventEmitter {
-    private protest_database: Protester[]
+export class ProtestStore extends EventEmitter {
+    private protest_database: Protest[]
     constructor() {
         super();
-        this.protest_database = new Array<Protester>();
+        this.protest_database = new Array<Protest>();
         AppDispatcher.register((payload: Action) => {
             switch (payload.actionType) {
 
                 case ToDoActions.ADD_MEMBER:
                     this.protest_database.push(
-                        new Protester(payload.data1, payload.data2, payload.data3));
+                        new Protest(payload.data1, payload.data2, payload.data3));
                         this.emit('change');
                     break;
                 default: ;
@@ -63,6 +63,31 @@ class Protester {
     }
     getGeoLocation(): number[] {
         return this.location.getGeo();
+    }
+}
+
+class Protest {
+    private participants: string[] = new Array<string>();
+    private location: Location;
+    constructor(private name: string, location: string, private date: string) {
+        this.location = new Location(location);
+    }
+    addParticipant(name: string) {
+        if (!this.participants.includes(name))
+            this.participants.push(name);
+    }
+    getParticipants(): string[] {
+        return this.participants;
+    }
+    getGeoLocation(): number[] {
+        return this.location.getGeo();
+    }
+    getNearBy(database, distance: number): Location {
+        return this.location.getNearBy(database, distance);
+    }
+    resetInfo(newTitle?: string, newTime?: string) {
+        this.name = newTitle;
+        this.date = newTime;
     }
 }
 
