@@ -2,13 +2,17 @@
 
 // UI.start(); //start up the UI
 
-import {ProtesterStore} from './store';
-import {ProtestertView} from './view';
+import {ProtesterStore, ProtestStore, MovementStore} from './store';
+import {ProtestertView, ProtestView, MovementView} from './view';
 import {ToDoActions} from './action';
 
-let store = new ProtesterStore();
-let view = new ProtestertView(store);
+let protesterStore = new ProtesterStore();
+let protesterView = new ProtestertView(protesterStore);
+
+let movementStore = new MovementStore;
+let movementView = new MovementStore;
+
+let protestStore = new ProtestStore(protesterStore, movementStore);
+let protestView = new ProtestView(protestStore);
 
 // store.sendMassage();
-
-ToDoActions.addMember("patrick", "pa", "98105");

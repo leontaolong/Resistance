@@ -22,6 +22,7 @@ export class ToDoActions {
     //Action Creators!
     static addMember(name: string, email: string, location: string) {
         let action = new Action(ToDoActions.ADD_MEMBER, name, email, location);
+        console.log("add");
         AppDispatcher.dispatch(action);
     }
 

@@ -15,6 +15,7 @@ class ToDoActions {
     //Action Creators!
     static addMember(name, email, location) {
         let action = new Action(ToDoActions.ADD_MEMBER, name, email, location);
+        console.log("add");
         exports.AppDispatcher.dispatch(action);
     }
     static addProtest(name, location, date) {

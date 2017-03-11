@@ -8,23 +8,24 @@
     <title>Document</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
         crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
+    <!--<script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>-->
+    
 </head>
 
 <body>
     <div class="container">
         <div id="member">
             <h2 id="memberHeading">
-                member:</heading>
+                member:</h2>
                 <div id="memberDiv"></div>
         </div>
-        <div id=“ protest”>
+        <div id=“protest”>
             <h2 id="protestHeading">
-                protest:</heading>
+                protest:</h2>
                 <div id="protestDiv"></div>
         </div>
         <div id="movement">
-            <h2 id="movementHeading">movement:</heading>
+            <h2 id="movementHeading">movement:</h2>
                 <div id="movementDiv"></div>
         </div>
         <div id="listOfProtestNearby">
@@ -35,21 +36,21 @@
             <h4>Register a new member</h4>
             <form class="form-horizontal" id="registerMemberForm">
                 <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">Name:</label>
+                    <label class="col-sm-2 control-label">Name:</label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id="inputEmail3 RMname" placeholder="Enter protestor name">
+                        <input  class="form-control" id="RMname" placeholder="Enter protestor name">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+                    <label class="col-sm-2 control-label">Email</label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id="inputEmail3 RMemail" placeholder="Enter protestor email">
+                        <input class="form-control" id="RMemail" placeholder="Enter protestor email">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">Zipcode</label>
+                    <label  class="col-sm-2 control-label">Zipcode</label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id="inputEmail3 RMzipCode" placeholder="Enter protestor zipcode">
+                        <input class="form-control" id="RMzipCode" placeholder="Enter protestor zipcode">
                     </div>
                 </div>
 
@@ -64,27 +65,27 @@
             <h4>Register a new protest</h4>
             <form class="form-horizontal">
                 <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">Name:</label>
+                    <label class="col-sm-2 control-label">Name:</label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id=" RPtitle" placeholder="Enter protest name">
+                        <input class="form-control" id="RPtitle" placeholder="Enter protest name">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">Date:</label>
+                    <label class="col-sm-2 control-label">Date:</label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id="RPdate " placeholder="Enter protest date">
+                        <input  class="form-control" id="RPdate" placeholder="Enter protest date">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">Zipcode:</label>
+                    <label  class="col-sm-2 control-label">Zipcode:</label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id=" RPzipcode" placeholder="Enter protest zipcode">
+                        <input class="form-control" id="RPzipcode" placeholder="Enter protest zipcode">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">Add a Protestor:</label>
+                    <label class="col-sm-2 control-label">Add a Protestor:</label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id=" RPprotestor" placeholder="Enter protest zipcode">
+                        <input class="form-control" id=" RPprotestor" placeholder="Enter protest zipcode">
                     </div>
                 </div>
                 <div class="form-group">
@@ -243,6 +244,8 @@
             </form>
         </div>
     </div>
+    
 </body>
-<script>"../build/view.js"</script>
+
 </html>
+<script src="bundle.js"></script>
