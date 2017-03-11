@@ -33,7 +33,6 @@ export class ProtestStore extends EventEmitter {
         this.protest_database = new Array<Protest>();
         AppDispatcher.register((payload: Action) => {
             switch (payload.actionType) {
-
                 case ToDoActions.ADD_MEMBER:
                     this.protest_database.push(
                         new Protest(payload.data1, payload.data2, payload.data3));
