@@ -6,7 +6,6 @@ class ProtestertView {
         this.store = store;
         //register listener to the store
         this.store.on('change', (e) => {
-            console.log("change");
             this.render();
         });
         $("#RMsubmit").click((e) => {
@@ -30,21 +29,33 @@ class ProtestView {
         this.store = store;
         //register listener to the store
         this.store.on('change', (e) => {
-            console.log("change");
             this.render();
         });
         $("#RPsubmit").click((e) => {
             e.preventDefault();
-            console.log("clicked");
             action_1.ToDoActions.addProtest($("#RPtitle").val(), $("#RPdate").val(), $("#RPzipcode").val()); //generate an event!
+            if ($('#RPprotestor') != undefined) {
+                action_1.ToDoActions.addMemberToProtest($('#RPprotestor').val(), $("#RPtitle").val());
+            }
+        });
+        $("#addMemeberSubmit").click((e) => {
+            e.preventDefault();
+            action_1.ToDoActions.addMemberToProtest($("#addMemeberProtester").val(), $("#addMemeberProtest").val()); //generate an event!
+        });
+        $("#MPsubmit").click((e) => {
+            e.preventDefault();
+            action_1.ToDoActions.modifyProtest($("#MPtitle").val(), $("#MPzipcode").val(), $("#MPdate").val()); //generate an event!
+            if ($('#MPprotestor') != undefined) {
+                action_1.ToDoActions.addMemberToProtest($('#MPprotestor').val(), $("#MPtitle").val());
+            }
         });
     }
     render() {
         $("#protestDiv").empty();
         let protests = this.store.getProtests();
         for (let i = 0; i < protests.length; i++) {
-            let info = $("<p></p>").text("Name:" + protests[i].getName() + " Location:"
-                + protests[i].getZipLocation() + " Date " + protests[i].getDate() + " participants " + protests[i].getParticipants());
+            let info = $("<p></p>").text("Name: " + protests[i].getName() + " Location: "
+                + protests[i].getZipLocation() + " Date: " + protests[i].getDate() + " Participants: " + protests[i].getParticipants().join(", "));
             $("#protestDiv").append(info);
         }
     }
@@ -53,7 +64,6 @@ exports.ProtestView = ProtestView;
 class MovementView {
     constructor() { }
     render() {
-        // let items = store.getItems();
         let name = $("<p></p>").text();
         let protests = $("<p></p>").text();
         $("memberDiv").add(name);

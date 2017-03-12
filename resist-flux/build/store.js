@@ -13,7 +13,6 @@ class ProtesterStore extends EventEmitter {
                 case action_1.ToDoActions.ADD_MEMBER:
                     if (find(this.protester_database, payload.data1) == undefined) {
                         this.protester_database.push(new Protester(payload.data1, payload.data2, payload.data3));
-                        console.log(this.protester_database);
                         this.emit('change');
                     }
                     break;
@@ -37,14 +36,15 @@ class ProtestStore extends EventEmitter {
                 case action_1.ToDoActions.ADD_PROTEST:
                     if (find(this.protest_database, payload.data1) == undefined)
                         this.protest_database.push(new Protest(payload.data1, payload.data2, payload.data3));
-                    console.log(this.protest_database);
                     this.emit('change');
                     break;
                 case action_1.ToDoActions.ADD_MEMBER_TO_PROTEST:
                     find(this.protest_database, payload.data2).addParticipant(payload.data1);
+                    this.emit('change');
                     break;
                 case action_1.ToDoActions.MODIFY_PROTEST:
                     find(this.protest_database, payload.data1).resetInfo(payload.data2, payload.data3);
+                    this.emit('change');
                     break;
                 case action_1.ToDoActions.GET_PROTESTERS:
                     this.currentProtest = find(this.protest_database, payload.data1);
@@ -62,6 +62,7 @@ class ProtestStore extends EventEmitter {
         });
     }
     getProtests() {
+        console.log(this.protest_database);
         return this.protest_database;
     }
     getProtesters() {
@@ -99,7 +100,7 @@ class MovementStore extends EventEmitter {
         this.movement_database = new Array();
         action_1.AppDispatcher.register((payload) => {
             switch (payload.actionType) {
-                case action_1.ToDoActions.ADD_PROTEST:
+                case action_1.ToDoActions.ADD_MOVEMENT:
                     if (find(this.movement_database, payload.data1) == undefined)
                         this.movement_database.push(new Movement(payload.data1));
                     this.emit('change');
@@ -171,8 +172,9 @@ class Protest {
         return this.location.getZip();
     }
     addParticipant(name) {
-        if (!this.participants.includes(name))
+        if (!this.participants.includes(name)) {
             this.participants.push(name);
+        }
     }
     getParticipants() {
         return this.participants;

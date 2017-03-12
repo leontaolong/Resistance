@@ -16,7 +16,6 @@ export class ProtesterStore extends EventEmitter {
                     if (find(this.protester_database, payload.data1) == undefined) {
                         this.protester_database.push(
                             new Protester(payload.data1, payload.data2, payload.data3));
-                        console.log(this.protester_database);
                         this.emit('change');
                     }
                     break;
@@ -50,16 +49,17 @@ export class ProtestStore extends EventEmitter {
                     if (find(this.protest_database, payload.data1) == undefined)
                         this.protest_database.push(
                             new Protest(payload.data1, payload.data2, payload.data3));
-                    console.log(this.protest_database);
                     this.emit('change');
                     break;
 
                 case ToDoActions.ADD_MEMBER_TO_PROTEST:
                     find(this.protest_database, payload.data2).addParticipant(payload.data1);
+                    this.emit('change');
                     break;
 
                 case ToDoActions.MODIFY_PROTEST:
                     find(this.protest_database, payload.data1).resetInfo(payload.data2, payload.data3);
+                    this.emit('change');
                     break;
 
                 case ToDoActions.GET_PROTESTERS:
@@ -81,6 +81,7 @@ export class ProtestStore extends EventEmitter {
         });
     }
     getProtests() {
+        console.log(this.protest_database);
         return this.protest_database;
     }
 
@@ -124,7 +125,7 @@ export class MovementStore extends EventEmitter {
         AppDispatcher.register((payload: Action) => {
             switch (payload.actionType) {
 
-                case ToDoActions.ADD_PROTEST:
+                case ToDoActions.ADD_MOVEMENT:
                     if (find(this.movement_database, payload.data1) == undefined)
                         this.movement_database.push(
                             new Movement(payload.data1));
@@ -206,8 +207,9 @@ class Protest {
     }
 
     addParticipant(name: string) {
-        if (!this.participants.includes(name))
+        if (!this.participants.includes(name)) {
             this.participants.push(name);
+        }
     }
     getParticipants(): string[] {
         return this.participants;

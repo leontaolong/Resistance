@@ -9,8 +9,7 @@ module.exports = {
   //where compiled code should go
   output: {
     filename: "bundle.js", //combine it into this file
-    path: '/dist', //in this folder (`__dirname`)
-    // publicPath: 'dist' //where server will look for output
+    path: '/dist', // publicPath: 'dist' //where server will look for output
   },
 
   //which files should be considered (add in `.ts`)
