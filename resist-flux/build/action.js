@@ -49,6 +49,10 @@ class ToDoActions {
         let action = new Action(ToDoActions.GET_NEARBY_PROTEST, location, distance);
         exports.AppDispatcher.dispatch(action);
     }
+    static updateProtestsInMovement(protestName, newTitle) {
+        let action = new Action(ToDoActions.UPDATE_PROTESTERS_IN_MOVEMENT, protestName, newTitle);
+        exports.AppDispatcher.dispatch(action);
+    }
     static setProtestStore(ps) {
         let action = new Action(ToDoActions.SET_PROTEST_STORE, ps);
         exports.AppDispatcher.dispatch(action);
@@ -63,6 +67,7 @@ ToDoActions.ADD_PROTEST_TO_MOVEMENT = "ADD_PROTEST_TO_MOVEMENT";
 ToDoActions.GET_PROTESTERS = "GET_PROTESTERS";
 ToDoActions.GET_USERS_NEAR_PROTEST = "GET_USERS_NEAR_PROTEST";
 ToDoActions.GET_NEARBY_PROTEST = "GET_NEARBY_PROTEST";
+ToDoActions.UPDATE_PROTESTERS_IN_MOVEMENT = "UPDATE_PROTESTERS_IN_MOVEMENT";
 ToDoActions.SET_PROTEST_STORE = "SET_PROTEST_STORE";
 exports.ToDoActions = ToDoActions;
 //# sourceMappingURL=action.js.map

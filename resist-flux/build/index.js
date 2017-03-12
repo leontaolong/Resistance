@@ -11,5 +11,4 @@ let movementView = new view_1.MovementView(movementStore);
 let protestStore = new store_1.ProtestStore(protesterStore, movementStore);
 let protestView = new view_1.ProtestView(protestStore);
 action_1.ToDoActions.setProtestStore(protestStore);
-// store.sendMassage();
 //# sourceMappingURL=index.js.map

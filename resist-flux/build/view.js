@@ -17,7 +17,7 @@ class ProtestertView {
         $("#memberDiv").empty();
         let protesters = this.store.getProtesters();
         for (let i = 0; i < protesters.length; i++) {
-            let info = $("<p></p>").text("Name:" + protesters[i].getName() + " Email:"
+            let info = $("<p></p>").text("Name: " + protesters[i].getName() + " Email: "
                 + protesters[i].getEmail() + " Zipcode: " + protesters[i].getZipLocation());
             $("#memberDiv").append(info);
         }
@@ -32,7 +32,6 @@ class ProtestView {
             this.render();
         });
         this.store.on('showList', (e) => {
-            console.log("showList");
             this.renderList();
         });
         this.store.on("showNearbyProtest", (e) => {
@@ -51,7 +50,6 @@ class ProtestView {
         });
         $("#MNPsubmit").click((e) => {
             e.preventDefault();
-            console.log("clicked");
             action_1.ToDoActions.getUsersNearProtest($("#MNPname").val(), $("#MNPdistance").val()); //generate an event!
         });
         $("#MNLsubmit").click((e) => {
@@ -61,8 +59,8 @@ class ProtestView {
         $("#MPsubmit").click((e) => {
             e.preventDefault();
             action_1.ToDoActions.modifyProtest($("#MPtitle").val(), $("#MPNewtitle").val(), $("#MPdate").val()); //generate an event!
-            if ($('#MPprotestor') != undefined) {
-                action_1.ToDoActions.addMemberToProtest($('#MPprotestor').val(), $("#MPtitle").val());
+            if ($('#MPNewtitle') != undefined) {
+                action_1.ToDoActions.updateProtestsInMovement($("#MPtitle").val(), $("#MPNewtitle").val());
             }
         });
     }
@@ -87,11 +85,12 @@ class ProtestView {
     renderList() {
         $("#listMember").empty();
         let nearProtestors = this.store.getUsersNearProtest();
-        let info = $("<p></p>").text("Member near" + $("#MNPname").val() + ": " + nearProtestors[0]);
-        //         for (let i = 0; i < nearProtestors.length; i++) {
-        //     // info.append(nearProtestors[i].getName() + " ");
-        // } 
+        let info = $("<p></p>").text("Member near " + $("#MNPname").val() + ": ");
         $("#listMember").append(info);
+        for (let i = 0; i < nearProtestors.length; i++) {
+            let info = nearProtestors[i];
+            $("#listMember").append(info);
+        }
     }
 }
 exports.ProtestView = ProtestView;
@@ -99,12 +98,10 @@ class MovementView {
     constructor(store) {
         this.store = store;
         this.store.on('change', (e) => {
-            console.log("change");
             this.render();
         });
         $("#Msubmit").click((e) => {
             e.preventDefault();
-            console.log("movement button clicked");
             action_1.ToDoActions.addMovement($("#Mname").val(), $("#MaddProtest").val());
         });
         $("#addPToMSubmit").click((e) => {
@@ -114,13 +111,10 @@ class MovementView {
     }
     render() {
         $("#movementDiv").empty();
-        // let items = store.getItems();
         let movements = this.store.getMovements();
         for (let i = 0; i < movements.length; i++) {
             let movement = movements[i];
-            console.log(movement.getProtests());
-            console.log("in for loop");
-            let info = $("<p></p>").text("Name: " + movement.getName() + "Protests: " + movement.getProtests());
+            let info = $("<p></p>").text("Name: " + movement.getName() + " Protests: " + movement.getProtests());
             $("#movementDiv").append(info);
         }
     }

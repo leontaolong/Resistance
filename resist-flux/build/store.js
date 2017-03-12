@@ -16,7 +16,6 @@ class ProtesterStore extends EventEmitter {
                         this.emit('change');
                     }
                     break;
-                default: console.log("action type invalid");
             }
         });
     }
@@ -39,32 +38,35 @@ class ProtestStore extends EventEmitter {
                     this.emit('change');
                     break;
                 case action_1.ToDoActions.ADD_MEMBER_TO_PROTEST:
-                    if (find(this.protestersStore.getProtesters(), payload.data1) != undefined)
+                    if (find(this.protestersStore.getProtesters(), payload.data1) != undefined
+                        && find(this.protest_database, payload.data2) != undefined) {
                         find(this.protest_database, payload.data2).addParticipant(payload.data1);
-                    this.emit('change');
+                        this.emit('change');
+                    }
                     break;
                 case action_1.ToDoActions.MODIFY_PROTEST:
-                    find(this.protest_database, payload.data1).resetInfo(payload.data2, payload.data3);
-                    this.emit('change');
+                    if (find(this.protest_database, payload.data1) != undefined &&
+                        find(this.protest_database, payload.data2) == undefined) {
+                        find(this.protest_database, payload.data1).resetInfo(payload.data2, payload.data3);
+                        this.emit('change');
+                    }
                     break;
                 case action_1.ToDoActions.GET_PROTESTERS:
-                    this.currentProtest = find(this.protest_database, payload.data1);
+                    if (find(this.protest_database, payload.data1) != undefined) {
+                        this.currentProtest = find(this.protest_database, payload.data1);
+                    }
                     break;
                 case action_1.ToDoActions.GET_USERS_NEAR_PROTEST:
-                    this.currentProtest = find(this.protest_database, payload.data1);
-                    // this.currentLocation = new Location(payload.data2);
-                    console.log("this.currentLocation = new Location(payload.data1) " +
-                        this.currentLocation);
-                    this.currentDistance = payload.data2;
-                    console.log("distance: " + this.currentDistance);
-                    this.emit("showList");
+                    if (find(this.protest_database, payload.data1) != undefined) {
+                        this.currentProtest = find(this.protest_database, payload.data1);
+                        this.currentDistance = payload.data2;
+                        this.emit("showList");
+                    }
                     break;
                 case action_1.ToDoActions.GET_NEARBY_PROTEST:
                     this.currentLocation = new Location(payload.data1);
                     this.currentDistance = payload.data2;
                     this.emit("showNearbyProtest");
-                    break;
-                default: console.log("action type invalid");
             }
         });
     }
@@ -82,10 +84,7 @@ class ProtestStore extends EventEmitter {
     }
     // find an array of emails of the registered users within a distance range of a particular geoLocation
     getUsersNearProtest() {
-        console.log("current protest: " + this.currentProtest.getName());
-        console.log("current protesters: " + this.protestersStore.getProtesters()[0].getGeoLocation()[0]);
         let protesters = this.currentProtest.getNearBy(this.protestersStore.getProtesters(), this.currentDistance * 1609.34);
-        console.log("protesters nearby: " + protesters);
         if (protesters != undefined)
             return protesters.map((protester) => protester.getName() + ": " + protester.getEmail()).join(", ");
         return undefined;
@@ -110,23 +109,35 @@ class MovementStore extends EventEmitter {
         action_1.AppDispatcher.register((payload) => {
             switch (payload.actionType) {
                 case action_1.ToDoActions.ADD_MOVEMENT:
-                    if (find(this.movement_database, payload.data1) == undefined) {
+                    if (find(this.movement_database, payload.data1) == undefined &&
+                        find(this.protestStore.getProtests(), payload.data2) != undefined) {
                         let movement = new Movement(payload.data1);
                         movement.addProtest(payload.data2);
                         this.movement_database.push(movement);
+                        this.emit('change');
                     }
-                    this.emit('change');
                     break;
                 case action_1.ToDoActions.ADD_PROTEST_TO_MOVEMENT:
                     if (find(this.movement_database, payload.data2) != undefined &&
                         find(this.protestStore.getProtests(), payload.data1) != undefined) {
                         find(this.movement_database, payload.data2).addProtest(payload.data1);
+                        this.emit('change');
                     }
-                    this.emit('change');
+                    break;
+                case action_1.ToDoActions.UPDATE_PROTESTERS_IN_MOVEMENT:
+                    if (find(this.protestStore.getProtests(), payload.data2) != undefined) {
+                        for (let i = 0; i < this.movement_database.length; i++) {
+                            for (let j = 0; j < this.movement_database[i].getProtests().length; j++) {
+                                if (this.movement_database[i].getProtests()[j] == payload.data1) {
+                                    this.movement_database[i].getProtests()[j] = payload.data2;
+                                }
+                            }
+                        }
+                        this.emit('change');
+                    }
+                    break;
                 case action_1.ToDoActions.SET_PROTEST_STORE:
                     this.protestStore = payload.data1;
-                    break;
-                default: console.log("action type invalid");
             }
         });
     }
@@ -236,7 +247,6 @@ class Location {
     }
     // return an array rtepresentatio of the geo location
     getGeo() {
-        console.log("locationData[this.locationZip]" + this.locationZip);
         return locationData[this.locationZip];
     }
     getZip() {
@@ -248,11 +258,7 @@ class Location {
     getNearBy(database, distance) {
         return database.filter((elementSearched) => {
             let userLoc = elementSearched.getGeoLocation();
-            console.log("userLoc is " + userLoc);
-            console.log("geo" + locationData[this.locationZip]);
-            console.log("element: " + elementSearched.getName());
             let distance_diff = geolib.getDistance({ latitude: userLoc[0], longitude: userLoc[1] }, { latitude: this.getGeo()[0], longitude: this.getGeo()[1] });
-            console.log("distance diff: " + distance_diff);
             return distance_diff <= distance;
         });
     }
