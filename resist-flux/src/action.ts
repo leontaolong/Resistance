@@ -18,6 +18,7 @@ export class ToDoActions {
     static readonly GET_PROTESTERS = "GET_PROTESTERS";
     static readonly GET_USERS_NEAR_PROTEST = "GET_USERS_NEAR_PROTEST";
     static readonly GET_NEARBY_PROTEST = "GET_NEARBY_PROTEST";
+    static readonly SET_PROTEST_STORE = "SET_PROTEST_STORE";
 
     //Action Creators!
     static addMember(name: string, email: string, location: string) {
@@ -46,7 +47,7 @@ export class ToDoActions {
     }
 
     static addProtestToMovement(protestName: string, movementName: string) {
-        let action = new Action(ToDoActions.ADD_PROTEST_TO_MOVEMENT, movementName);
+        let action = new Action(ToDoActions.ADD_PROTEST_TO_MOVEMENT, protestName, movementName);
         AppDispatcher.dispatch(action); 
     }
 
@@ -64,4 +65,9 @@ export class ToDoActions {
         let action = new Action(ToDoActions.GET_NEARBY_PROTEST, location, distance);
         AppDispatcher.dispatch(action);
     }
+
+    static setProtestStore(ps) {
+        let action = new Action(ToDoActions.SET_PROTEST_STORE, ps);
+        AppDispatcher.dispatch(action);
+    } 
 }

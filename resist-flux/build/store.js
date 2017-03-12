@@ -39,7 +39,8 @@ class ProtestStore extends EventEmitter {
                     this.emit('change');
                     break;
                 case action_1.ToDoActions.ADD_MEMBER_TO_PROTEST:
-                    find(this.protest_database, payload.data2).addParticipant(payload.data1);
+                    if (find(this.protestersStore.getProtesters(), payload.data1) != undefined)
+                        find(this.protest_database, payload.data2).addParticipant(payload.data1);
                     this.emit('change');
                     break;
                 case action_1.ToDoActions.MODIFY_PROTEST:
@@ -62,7 +63,6 @@ class ProtestStore extends EventEmitter {
         });
     }
     getProtests() {
-        console.log(this.protest_database);
         return this.protest_database;
     }
     getProtesters() {
@@ -109,7 +109,14 @@ class MovementStore extends EventEmitter {
                     this.emit('change');
                     break;
                 case action_1.ToDoActions.ADD_PROTEST_TO_MOVEMENT:
-                    find(this.movement_database, payload.data2).addProtest(payload.data1);
+                    if (find(this.movement_database, payload.data2) != undefined &&
+                        find(this.protestStore.getProtests(), payload.data1) != undefined) {
+                        find(this.movement_database, payload.data2).addProtest(payload.data1);
+                    }
+                    this.emit('change');
+                case action_1.ToDoActions.SET_PROTEST_STORE:
+                    this.protestStore = payload.data1;
+                    break;
                 default: console.log("action type invalid");
             }
         });

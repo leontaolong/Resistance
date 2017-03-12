@@ -15,6 +15,5 @@ let movementView = new MovementView(movementStore);
 let protestStore = new ProtestStore(protesterStore, movementStore);
 let protestView = new ProtestView(protestStore);
 
-
-
+ToDoActions.setProtestStore(protestStore);
 // store.sendMassage();

@@ -51,12 +51,11 @@ export class ProtestView {
 
         $("#MPsubmit").click((e) => { //on user interaction
             e.preventDefault();
-            ToDoActions.modifyProtest($("#MPtitle").val(), $("#MPzipcode").val(), $("#MPdate").val()); //generate an event!
+            ToDoActions.modifyProtest($("#MPtitle").val(), $("#MPNewtitle").val(), $("#MPdate").val()); //generate an event!
             if ($('#MPprotestor') != undefined) {
             ToDoActions.addMemberToProtest($('#MPprotestor').val(), $("#MPtitle").val());  
             }
-        });
-        
+        });     
     }
 
     render() {
@@ -78,10 +77,16 @@ export class MovementView {
             console.log("change");
             this.render();
         });
+
         $("#Msubmit").click((e) =>{
             e.preventDefault();
             console.log("movement button clicked");
             ToDoActions.addMovement($("#Mname").val(),$("#MaddProtest").val());
+        });
+
+        $("#addPToMSubmit").click((e) => { //on user interaction
+            e.preventDefault();
+            ToDoActions.addProtestToMovement($('#addPToMProtest').val(), $("#addPToMMovement").val());  
         });
     }
 
@@ -92,20 +97,10 @@ export class MovementView {
 
         for (let i = 0; i < movements.length; i++) {
             let movement = movements[i];
+            console.log(movement.getProtests());
             console.log("in for loop");
             let info = $("<p></p>").text("Name: " + movement.getName() + "Protests: " + movement.getProtests());
             $("#movementDiv").append(info);
         }
-    }
-}
-
-class LocationView {
-    constructor() { }
-
-    render() {
-        // let items = store.getItems();
-        let protests = $("<p></p>").text();
-
-        $("memberDiv").add(protests);
     }
 }
