@@ -30,8 +30,8 @@ export class ToDoActions {
         AppDispatcher.dispatch(action);
     }
 
-    static addMovement(name: string) {
-        let action = new Action(ToDoActions.ADD_MOVEMENT, name);
+    static addMovement(name: string, protest:string) {
+        let action = new Action(ToDoActions.ADD_MOVEMENT, name, protest);
         AppDispatcher.dispatch(action);
     }
 

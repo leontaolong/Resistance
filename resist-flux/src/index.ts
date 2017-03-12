@@ -9,10 +9,12 @@ import {ToDoActions} from './action';
 let protesterStore = new ProtesterStore();
 let protesterView = new ProtestertView(protesterStore);
 
-let movementStore = new MovementStore;
-let movementView = new MovementStore;
+let movementStore = new MovementStore();
+let movementView = new MovementView(movementStore);
 
 let protestStore = new ProtestStore(protesterStore, movementStore);
 let protestView = new ProtestView(protestStore);
+
+
 
 // store.sendMassage();

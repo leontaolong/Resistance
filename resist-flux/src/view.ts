@@ -71,14 +71,31 @@ export class ProtestView {
 }
 
 export class MovementView {
-    constructor() { }
+    private store;
+    constructor(store) {
+        this.store = store;
+        this.store.on('change', (e) => {
+            console.log("change");
+            this.render();
+        });
+        $("#Msubmit").click((e) =>{
+            e.preventDefault();
+            console.log("movement button clicked");
+            ToDoActions.addMovement($("#Mname").val(),$("#MaddProtest").val());
+        });
+    }
 
     render() {
-        let name = $("<p></p>").text();
-        let protests = $("<p></p>").text();
+        $("#movementDiv").empty();
+        // let items = store.getItems();
+        let movements = this.store.getMovements();
 
-        $("memberDiv").add(name);
-        $("memberDiv").add(protests);
+        for (let i = 0; i < movements.length; i++) {
+            let movement = movements[i];
+            console.log("in for loop");
+            let info = $("<p></p>").text("Name: " + movement.getName() + "Protests: " + movement.getProtests());
+            $("#movementDiv").append(info);
+        }
     }
 }
 
