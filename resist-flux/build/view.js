@@ -31,9 +31,16 @@ class ProtestView {
         this.store.on('change', (e) => {
             this.render();
         });
+        this.store.on('showList', (e) => {
+            console.log("showList");
+            this.renderList();
+        });
+        this.store.on("showNearbyProtest", (e) => {
+            this.renderNearbyProtest();
+        });
         $("#RPsubmit").click((e) => {
             e.preventDefault();
-            action_1.ToDoActions.addProtest($("#RPtitle").val(), $("#RPdate").val(), $("#RPzipcode").val()); //generate an event!
+            action_1.ToDoActions.addProtest($("#RPtitle").val(), $("#RPzipcode").val(), $("#RPdate").val()); //generate an event!
             if ($('#RPprotestor') != undefined) {
                 action_1.ToDoActions.addMemberToProtest($('#RPprotestor').val(), $("#RPtitle").val());
             }
@@ -41,6 +48,15 @@ class ProtestView {
         $("#addMemeberSubmit").click((e) => {
             e.preventDefault();
             action_1.ToDoActions.addMemberToProtest($("#addMemeberProtester").val(), $("#addMemeberProtest").val()); //generate an event!
+        });
+        $("#MNPsubmit").click((e) => {
+            e.preventDefault();
+            console.log("clicked");
+            action_1.ToDoActions.getUsersNearProtest($("#MNPname").val(), $("#MNPdistance").val()); //generate an event!
+        });
+        $("#MNLsubmit").click((e) => {
+            e.preventDefault();
+            action_1.ToDoActions.getNearbyProtests($("#MNLzipcode").val(), $("#MNLdistance").val());
         });
         $("#MPsubmit").click((e) => {
             e.preventDefault();
@@ -50,6 +66,15 @@ class ProtestView {
             }
         });
     }
+    renderNearbyProtest() {
+        $("#listDiv").empty();
+        let nearbyProtests = this.store.getNearbyProtests();
+        let info = $("<p></p>").text("Neaby protest: ");
+        for (let i = 0; i < nearbyProtests.length; i++) {
+            info.append(nearbyProtests[i] + " ");
+        }
+        $("#listDiv").append(info);
+    }
     render() {
         $("#protestDiv").empty();
         let protests = this.store.getProtests();
@@ -58,6 +83,15 @@ class ProtestView {
                 + protests[i].getZipLocation() + " Date: " + protests[i].getDate() + " Participants: " + protests[i].getParticipants().join(", "));
             $("#protestDiv").append(info);
         }
+    }
+    renderList() {
+        $("#listMember").empty();
+        let nearProtestors = this.store.getUsersNearProtest();
+        let info = $("<p></p>").text("Member near" + $("#MNPname").val() + ": " + nearProtestors[0]);
+        //         for (let i = 0; i < nearProtestors.length; i++) {
+        //     // info.append(nearProtestors[i].getName() + " ");
+        // } 
+        $("#listMember").append(info);
     }
 }
 exports.ProtestView = ProtestView;

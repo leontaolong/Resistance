@@ -69,12 +69,18 @@ export class ProtestStore extends EventEmitter {
 
                 case ToDoActions.GET_USERS_NEAR_PROTEST:
                     this.currentProtest = find(this.protest_database, payload.data1);
+                    // this.currentLocation = new Location(payload.data2);
+                    console.log("this.currentLocation = new Location(payload.data1) " +
+                    this.currentLocation);
                     this.currentDistance = payload.data2;
+                    console.log("distance: " + this.currentDistance);
+                    this.emit("showList");
                     break;
 
                 case ToDoActions.GET_NEARBY_PROTEST:
                     this.currentLocation = new Location(payload.data1);
-                    this.currentDistance = payload.data1;
+                    this.currentDistance = payload.data2;
+                    this.emit("showNearbyProtest")
                     break;
 
                 default: console.log("action type invalid");
@@ -97,14 +103,17 @@ export class ProtestStore extends EventEmitter {
 
     // find an array of emails of the registered users within a distance range of a particular geoLocation
     getUsersNearProtest() {
+        console.log("current protest: " + this.currentProtest.getName());
+        console.log("current protesters: " + this.protestersStore.getProtesters()[0].getGeoLocation()[0]);
         let protesters = this.currentProtest.getNearBy(this.protestersStore.getProtesters(), this.currentDistance * 1609.34);
+        console.log("protesters nearby: " + protesters);
         if (protesters != undefined)
-            return protesters.map((protester) => protester.getName() + ": " + protester.getEmail());
+            return protesters.map((protester) => protester.getName() + ": " + protester.getEmail()).join(", ");
         return undefined;
     }
 
     // find an array of all protests and its movement(s) within a distance range of a particular location data
-    getNearbyProtests() {
+    getNearbyProtests():string[] {
         let protests = this.currentLocation.getNearBy(this.protest_database, this.currentDistance * 1609.34);
         if (protests != undefined) {
             return protests.map((protest) => {
@@ -266,21 +275,27 @@ class Location {
 
     // return an array rtepresentatio of the geo location
     getGeo(): number[] {
+        console.log("locationData[this.locationZip]" + this.locationZip);
         return locationData[this.locationZip];
     }
     getZip(): string {
         return this.locationZip;
     }
+    
     // take in a database and a distance
     // return an array of elements from the databae, 
     // of which locations are in the distance range of this location
     getNearBy(database, distance: number) {
         return database.filter((elementSearched) => {
             let userLoc: number[] = elementSearched.getGeoLocation();
+            console.log("userLoc is " + userLoc);
+            console.log("geo" + locationData[this.locationZip]);
+            console.log("element: " + elementSearched.getName());
             let distance_diff = geolib.getDistance(
                 { latitude: userLoc[0], longitude: userLoc[1] },
                 { latitude: this.getGeo()[0], longitude: this.getGeo()[1] }
             )
+            console.log("distance diff: " + distance_diff);
             return distance_diff <= distance;
         });
     }
