@@ -1,42 +1,20 @@
 {
   "protesters": [
     {
-      "name": "p",
-      "email": "p",
+      "name": "leon",
+      "email": "leon",
       "location": "98105"
-    },
-    {
-      "name": "aa",
-      "email": "rr",
-      "location": "55"
     }
   ],
   "protests": [
     {
-      "name": "bllll",
+      "name": "ll",
       "location": "98105",
-      "date": "2011-11-11",
-      "participants": []
-    },
-    {
-      "name": "pp",
-      "location": "98105",
-      "date": "2011-11-11",
+      "date": "2011",
       "participants": [
-        "p"
+        "leon"
       ]
-    },
-    {
-      "name": "title",
-      "location": "44",
-      "date": "123",
-      "participants": []
     }
   ],
-  "movements": [
-    {
-      "name": "blm",
-      "protests": []
-    }
-  ]
+  "movements": []
 }
