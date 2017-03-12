@@ -57,7 +57,7 @@ export class ProtestStore extends EventEmitter {
                 case ToDoActions.ADD_MEMBER_TO_PROTEST:
                     find(this.protest_database, payload.data2).addParticipant(payload.data1);
                     break;
-
+                
                 case ToDoActions.MODIFY_PROTEST:
                     find(this.protest_database, payload.data1).resetInfo(payload.data2, payload.data3);
                     break;
@@ -123,11 +123,14 @@ export class MovementStore extends EventEmitter {
         this.movement_database = new Array<Movement>();
         AppDispatcher.register((payload: Action) => {
             switch (payload.actionType) {
-
-                case ToDoActions.ADD_PROTEST:
-                    if (find(this.movement_database, payload.data1) == undefined)
+                case ToDoActions.ADD_MOVEMENT:
+                    if (find(this.movement_database, payload.data1) == undefined){
+                        let movement = new Movement(payload.data1)
+                        movement.addProtest(payload.data2);
                         this.movement_database.push(
-                            new Movement(payload.data1));
+                                movement
+                            );
+                    }
                     this.emit('change');
                     break;
 
@@ -142,6 +145,7 @@ export class MovementStore extends EventEmitter {
     getMovements() {
         return this.movement_database;
     }
+
 
     // find an array of nation-wide movement(s) that the given protestName is part of
     findMovement(protestName: string) {

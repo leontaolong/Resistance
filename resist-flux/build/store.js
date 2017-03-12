@@ -99,9 +99,12 @@ class MovementStore extends EventEmitter {
         this.movement_database = new Array();
         action_1.AppDispatcher.register((payload) => {
             switch (payload.actionType) {
-                case action_1.ToDoActions.ADD_PROTEST:
-                    if (find(this.movement_database, payload.data1) == undefined)
-                        this.movement_database.push(new Movement(payload.data1));
+                case action_1.ToDoActions.ADD_MOVEMENT:
+                    if (find(this.movement_database, payload.data1) == undefined) {
+                        let movement = new Movement(payload.data1);
+                        movement.addProtest(payload.data2);
+                        this.movement_database.push(movement);
+                    }
                     this.emit('change');
                     break;
                 case action_1.ToDoActions.ADD_PROTEST_TO_MOVEMENT:
