@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "target": "es2017",
+        "module": "commonjs",
+        "sourceMap": true,
+        "outDir": "build/",
+        "alwaysStrict": true,
+        "compileOnSave": false,
+        "types": ["node"],
+        "typeRoots": [
+        "../node_modules/@types"
+        ]
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "./node_modules"
+    ]
+}

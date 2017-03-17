@@ -1,0 +1,20 @@
+{
+  "name": "resist-layered",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cd build/ && node index.js"
+  },
+  "author": "Leon long, Patrick Yi",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^7.0.5",
+    "geolib": "^2.0.22",
+    "readline-sync": "^1.4.5",
+    "jsonfile": "^2.4.0"
+  },
+  "dependencies": {
+  }
+}
